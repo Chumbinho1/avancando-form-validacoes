@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Client extends Model
 {
     use HasFactory;
-    
+
     const TYPE_INDIVIDUAL = 'individual';
     const TYPE_LEGAL = 'legal';
 
@@ -36,4 +36,9 @@ class Client extends Model
         'company_name',
         'client_type'
     ];
+
+    public static function getClientType($type)
+    {
+        return $type == Client::TYPE_LEGAL ? $type : Client::TYPE_INDIVIDUAL;
+    }
 }
