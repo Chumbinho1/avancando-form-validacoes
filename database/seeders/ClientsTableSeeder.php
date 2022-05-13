@@ -2,20 +2,20 @@
 
 namespace Database\Seeders;
 
+use App\Models\Client;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class ClientsTableSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
-        $this->call([
-            ClientsTableSeeder::class
-        ]);
+        Client::factory()->count(2)->individual()->create();
+        Client::factory()->count(2)->legal()->create();
     }
 }
