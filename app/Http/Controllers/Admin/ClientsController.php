@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ClientRequest;
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class ClientsController extends Controller
 {
@@ -37,14 +39,14 @@ class ClientsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ClientRequest $request)
     {
-        $datas = $this->_validate($request);
+        $datas = $request->only(array_keys($request->rules()));
         $datas['defaulter'] = $request->has('defaulter');
         $datas['client_type'] = Client::getClientType($request->client_type);
         Client::create($datas);
 
-        return redirect()->route('clients.index');
+        return redirect()->route('clients.index')->with('message', 'Cliente cadastrado com sucesso!');
     }
 
     /**
@@ -77,16 +79,15 @@ class ClientsController extends Controller
      * @param  Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Client $client)
+    public function update(ClientRequest $request, Client $client)
     {
-        $datas = $this->_validate($request);
-
+        $datas = $request->only(array_keys($request->rules()));
         $datas['defaulter'] = $request->has('defaulter');
 
         $client->fill($datas);
         $client->save();
 
-        return redirect()->route('clients.index');
+        return redirect()->route('clients.index')->with('message', 'Cliente alterado com sucesso!');
     }
 
     /**
@@ -98,34 +99,6 @@ class ClientsController extends Controller
     public function destroy(Client $client)
     {
         $client->delete();
-        return redirect()->route('clients.index');
-    }
-
-    protected function _validate(Request $request)
-    {
-        $clientType = Client::getClientType($request->client_type);
-        $client = $request->route('client');
-        $clientId = $client instanceof Client ? $client->id : null;
-        $rules = [
-            'name' => 'required|max:255',
-            'document_number' => "required|unique:clients,document_number,$clientId|cpf_cnpj",
-            'email' => 'required|email',
-            'phone' => 'required',
-        ];
-
-        $maritalStatus = implode(',', array_keys(Client::MARITAL_STATUS));
-        $sex = implode(',', Client::SEX);
-        $rulesIndividual = [
-            'date_birth' => 'required|date',
-            'marital_status' => "required|in:$maritalStatus",
-            'sex' => "required|in:$sex",
-            'physical_disability' => 'max:255'
-        ];
-
-        $rulesLegal = [
-            'company_name' => 'required|max:255'
-        ];
-
-        return $this->validate($request, $clientType == Client::TYPE_INDIVIDUAL ? $rules + $rulesIndividual : $rules + $rulesLegal);
+        return redirect()->route('clients.index')->with('message', 'Cliente cadastrado com sucesso!');;
     }
 }
