@@ -35,4 +35,5 @@
     </tbody>
     </thead>
 </table>
+{{ $clients->links() }}
 @endsection

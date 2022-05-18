@@ -52,7 +52,7 @@
         </tr>
         <tr>
             <th scope="row">Sexo</th>
-            <td>{{ $client->sex === 'm' ? 'Masculino' : 'Feminino' }}</td>
+            <td>{{ $client->sex }}</td>
         </tr>
         <tr>
             <th scope="row">Deficiência Física</th>
