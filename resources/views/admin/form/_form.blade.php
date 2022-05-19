@@ -1,7 +1,7 @@
 @csrf
 <input type="hidden" name="client_type" value="{{ $clientType }}">
 <div class="form-group mb-3">
-    <label class="form-label" for="name">Nome</label>
+    <label class="form-label" for="name"></label>
     <input type="text" name="name" placeholder="Nome" value="{{ old('name', $client->name) }}" class="form-control" id="name">
 </div>
 
